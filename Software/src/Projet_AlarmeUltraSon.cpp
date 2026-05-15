@@ -1,5 +1,4 @@
- #include "Projet_AlarmeUltraSon.hpp"
-
+#include "Projet_AlarmeUltraSon.hpp"
 
 
 int Sortie_Led = 10;
@@ -15,7 +14,7 @@ char code[5];
 
  void PWM_Mode()                             // a low pull on pin COMP/TRIG  triggering a sensor reading 
  {  
-   Serial.print("Distance Measured="); 
+   Serial.print("Distance Measured ="); 
    digitalWrite(URTRIG, LOW); 
    digitalWrite(URTRIG, HIGH);               // reading Pin PWM will output pulses   
    if(Measure) 
@@ -63,6 +62,7 @@ char code[5];
  void Init_clavier()
  {
     PORTD &= ~((1 << PD6) | (1 << PD2) | (1 << PD3) | (1 << PD4));
+    PORTC |= (1 << PC3) | (1 << PC4) | (1 << PC5);
  }
 
  
@@ -79,34 +79,23 @@ char code[5];
   {
     switch(ligne)
     {
-        case 0: PORTD |= (1 << PD6); break;
-        case 1: PORTD |= (1 << PD2); break;
-        case 2: PORTD |= (1 << PD3); break;
-        case 3: PORTD |= (1 << PD4); break;
+      case 0: PORTD |= (1 << PD6); break;
+      case 1: PORTD |= (1 << PD2); break;
+      case 2: PORTD |= (1 << PD3); break;
+      case 3: PORTD |= (1 << PD4); break;
     }
     Serial.print("    | ");
     Serial.print(PINC, BIN);
     Serial.print("    | ");
     Serial.println(PORTD, BIN);
+    delay(100);
 
-    if(PINC & (1 << PC3)) {
-      while(PINC & (1 << PC3));
-      //return clavier[ligne][0];
-    }
-
-    if(PINC & (1 << PC4)) {
-      while(PINC & (1 << PC4));
-      //return clavier[ligne][1];
-    }
-
-    if(PINC & (1 << PC5)) {
-      while(PINC & (1 << PC5));
-      //return clavier[ligne][2];
-    }
+    if(PINC & (1 << PC3)) return clavier[ligne][0];
+    if(PINC & (1 << PC4)) return clavier[ligne][1];
+    if(PINC & (1 << PC5)) return clavier[ligne][2];
   }
-
-  return '\0';
-}
+  return 0;
+ }
 
  
  void Lire_code(char code[])
@@ -117,7 +106,7 @@ char code[5];
     char touche = lecture_clavier();
     Serial.println(touche);
 
-    if(strcmp(code, "4582") == 0)     //verifie le code
+    if(touche != 0)     //verifie le code
     {
       code[i] = touche;
       i++;
@@ -133,10 +122,10 @@ char code[5];
  {
    if(strcmp(code, "4582") == 0)
    {
-    tone(10,1000);
+    tone(10,1000);      //Bon code
     delay(500);
     tone(10,10000);
-    delay(500);      //Bon code
+    delay(500);      
    }
    else
    {
