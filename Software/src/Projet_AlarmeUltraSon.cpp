@@ -61,15 +61,9 @@ char code[5];
 
  void Init_clavier()
  {
-    PORTD &= ~((1 << PD6) | (1 << PD2) | (1 << PD3) | (1 << PD4));
-    PORTC |= (1 << PC3) | (1 << PC4) | (1 << PC5);
- }
-
- 
- void Init_port()
- {
-    DDRD |= (1 << PD6) | (1 << PD2) | (1 << PD3) | (1 << PD4);    // Config lignes = sorties
-    DDRC &= ~((1 << PC3) | (1 << PC4) | (1 << PC5));     // Config colonnes = entrées
+    DDRD |= (1 << PD6) | (1 << PD2) | (1 << PD3) | (1 << PD4);    //Config lignes = sorties
+    DDRC &= ~((1 << PC3) | (1 << PC4) | (1 << PC5));    //Config colonnes = entrées
+    PORTC |= (1 << PC3) | (1 << PC4) | (1 << PC5);    //Pull-up colonnes
  }
 
 
@@ -77,6 +71,7 @@ char code[5];
  {
   for(int ligne = 0; ligne < 4; ligne++)
   {
+    PORTD &= ~((1 << PD6) | (1 << PD2) | (1 << PD3) | (1 << PD4));    //Mettre lignes à 0
     switch(ligne)
     {
       case 0: PORTD |= (1 << PD6); break;
@@ -114,7 +109,7 @@ char code[5];
       while(lecture_clavier() != 0);    //Attendre relachement
     }  
   }  
-  code[4] = '\0';
+  code[4] = '\0';   //Fin de chaine
  }
 
 
@@ -125,7 +120,11 @@ char code[5];
     tone(10,1000);      //Bon code
     delay(500);
     tone(10,10000);
-    delay(500);      
+    delay(500);
+    tone(10,1000);      
+    delay(500);
+    tone(10,10000);
+    delay(500);
    }
    else
    {

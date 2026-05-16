@@ -51,6 +51,5 @@ extern unsigned int DistanceMeasured;
 void PWM_Mode();
 void Allumer_Led();
 void Init_clavier();
-void Init_port();
 void Lire_code(char code[]);
 void Verifier_code  (char code[]);
