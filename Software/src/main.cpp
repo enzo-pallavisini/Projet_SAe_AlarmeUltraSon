@@ -12,6 +12,8 @@ void setup()
 
 void loop() 
 { 
+  tone(0, 10000);
+  delay(2000);
   Lire_code(code);
   Verifier_code(code);
 }  
