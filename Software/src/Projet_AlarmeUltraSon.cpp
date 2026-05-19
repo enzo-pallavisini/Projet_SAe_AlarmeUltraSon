@@ -142,7 +142,7 @@ void Verifier_code(char code[])
       OCR1A = 100;
       delay(5);
       Serial.println(OCR1A);
-    }
+    }&
     for (int i = 99; i < 9999; i += 20)
     {
       // frequence(i);
