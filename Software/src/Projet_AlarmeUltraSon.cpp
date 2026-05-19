@@ -53,7 +53,7 @@ void PWM_Mode()                             // a low pull on pin COMP/TRIG  trig
 
 void Changer_Led()
 {
- PORTB ^= (1 << Sortie_Led);
+ PORTB ^= (1 << 7);
 }
 
 
@@ -111,7 +111,9 @@ void Verifier_code(char code[])
 {
  if(strcmp(code, "4582") == 0)      //Bon code
  {
-  Changer_Led();   
+  Changer_Led();
+  delay(1000);
+  Serial.println("Code bon");
  }
  else      //Mauvais code
  {

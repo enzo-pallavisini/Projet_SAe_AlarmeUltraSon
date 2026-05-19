@@ -10,8 +10,9 @@ void setup()
 
 void loop() 
 { 
-  PWM_Mode(); 
+  /*PWM_Mode(); 
   delay(100);
   Lire_code(code);
-  Verifier_code(code);
+  Verifier_code(code);*/
+  Changer_Led();
 }  
