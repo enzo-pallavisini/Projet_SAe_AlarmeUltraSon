@@ -54,6 +54,7 @@ void frequence();
 void Mesure_distance();
 void Init_Led();
 void Changer_Led();
+void Init_Buzzer();
 void Init_clavier();
 void Lire_code(char code[]);
 void Verifier_code  (char code[]);

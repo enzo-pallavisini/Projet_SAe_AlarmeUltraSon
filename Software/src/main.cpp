@@ -7,6 +7,7 @@ void setup()
   Serial.println("Init the sensor");
   Init_clavier();
   Init_Led();
+  Init_Buzzer();
 } 
 
 void loop() 

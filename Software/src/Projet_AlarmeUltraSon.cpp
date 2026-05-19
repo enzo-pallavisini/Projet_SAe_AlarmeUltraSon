@@ -52,6 +52,15 @@ void Mesure_distance()                             // a low pull on pin COMP/TRI
 } 
 
 
+void Init_Buzzer()
+{
+  DDRB |= (1 << Sortie_Buzzer);
+  TCCR2B |= (1 << 2);
+  TCCR2A |= (1 << 7) | (1 << 1) | (1 << 0);
+  OCR2A = 0;
+}
+
+
 void Init_Led()
 {
   DDRB |= (1 << Sortie_Led);
@@ -121,14 +130,17 @@ void Verifier_code(char code[])
   Changer_Led();
   Serial.println("Code bon");
   Mesure_distance();
-  for(int i = 0;i<10000;i++){
-  frequence(i);
-  delay(1);
+  for(int i = 100; i < 10000; i++){
+    frequence(i);
+    delay(1);
+    Serial.println(OCR2A);
   }
-  for(int i = 10000;i>0;i--){
-  frequence(i);
-  delay(1);
+  for(int i = 10000; i > 100; i--){
+    frequence(i);
+    delay(1);
+    Serial.println(OCR2A);
   }
+
  }
  else      //Mauvais code
  {
@@ -142,13 +154,13 @@ ISR(PCINT0_vect)
 {
  if(Distance_Mesure < 50)
  { 
-  for(int i = 0;i<10000;i++){
+  for(int i = 0;i<255;i++){
   frequence(i);
-  delay(2);
+  delay(5000/255);
   }
-  for(int i = 10000;i>0;i--){
+  for(int i = 255;i>0;i--){
   frequence(i);
-  delay(2);
+  delay(5000/255);
   }
  }
 }
