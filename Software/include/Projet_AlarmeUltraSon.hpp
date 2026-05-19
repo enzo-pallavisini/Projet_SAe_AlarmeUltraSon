@@ -15,7 +15,8 @@
  // # Connection: 
  // #       Vcc (Arduino)    -> Pin 1 VCC (URM V4.0) 
  // #       GND (Arduino)    -> Pin 2 GND (URM V4.0) 
- //#        PIN 10 (Arduino)  -> Sortie LED
+ // #       PIN 11 (Arduino)  -> Sortie Buzzer
+ // #       PIN 10 (Arduino)  -> Sortie LED
  // #       Pin 9 (Arduino)  -> Pin 4 ECHO (URM V4.0) 
  // #       Pin 8 (Arduino)  -> Pin 6 COMP/TRIG (URM V4.0) 
  // #       Pin A0 (Arduino)  -> Pin 7 DAC (URM V4.0) 

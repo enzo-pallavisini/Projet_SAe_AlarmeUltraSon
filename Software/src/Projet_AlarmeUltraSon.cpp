@@ -133,8 +133,9 @@ ISR(PCINT0_vect)
 {
  if(DistanceMeasured < 50)
  { 
+  
   frequence(1000);
-  delay(500);
+  delay(5);
   frequence(10000);
   delay(500);
   frequence(1000);
