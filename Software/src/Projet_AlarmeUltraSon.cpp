@@ -1,25 +1,26 @@
 #include "Projet_AlarmeUltraSon.hpp"
 
 
-int Sortie_Led = 10;
+int Sortie_Led = 2;
+int Sortie_Buzzer = 3;
 int URECHO = 9;        // PWM Output 0-25000US,Every 50US represent 1cm 
 int URTRIG = 8;         // PWM trigger pin 
 int sensorPin = A0;     // select the input pin for the potentiometer 
 int sensorValue = 0;    // variable to store the value coming from the sensor 
-unsigned int DistanceMeasured = 0; 
+unsigned int Distance_Mesure = 0; 
 
 char code[5]; 
 
 
 void frequence(int x)
 {
-  OCR1A = ((16000000)/(2*8*x))-1;
+  OCR2A = ((16000000)/(2*8*x))-1;
 }
 
 
-void PWM_Mode()                             // a low pull on pin COMP/TRIG  triggering a sensor reading 
+void Mesure_distance()                             // a low pull on pin COMP/TRIG  triggering a sensor reading 
 {  
-  Serial.print("Distance Measured ="); 
+  Serial.print("Distance Mesure ="); 
   digitalWrite(URTRIG, LOW); 
   digitalWrite(URTRIG, HIGH);               // reading Pin PWM will output pulses   
   if(Measure) 
@@ -30,8 +31,8 @@ void PWM_Mode()                             // a low pull on pin COMP/TRIG  trig
       Serial.print("Invalid"); 
     } 
     else{ 
-    DistanceMeasured = LowLevelTime /50;   // every 50us low level stands for 1cm 
-    Serial.print(DistanceMeasured); 
+    Distance_Mesure = LowLevelTime /50;   // every 50us low level stands for 1cm 
+    Serial.print(Distance_Mesure); 
     Serial.println("cm"); 
   } 
  
@@ -59,7 +60,7 @@ void Init_Led()
 
 void Changer_Led()
 {
- PORTB ^= (1 << Sortie_Led);
+  PORTB ^= (1 << Sortie_Led);
 }
 
 
@@ -118,8 +119,16 @@ void Verifier_code(char code[])
  if(strcmp(code, "4582") == 0)      //Bon code
  {
   Changer_Led();
-  delay(1000);
   Serial.println("Code bon");
+  Mesure_distance();
+  for(int i = 0;i<10000;i++){
+  frequence(i);
+  delay(1);
+  }
+  for(int i = 10000;i>0;i--){
+  frequence(i);
+  delay(1);
+  }
  }
  else      //Mauvais code
  {
@@ -131,13 +140,15 @@ void Verifier_code(char code[])
 
 ISR(PCINT0_vect)
 {
- if(DistanceMeasured < 50)
+ if(Distance_Mesure < 50)
  { 
-  
-  frequence(1000);
-  delay(5);
-  frequence(10000);
-  delay(500);
-  frequence(1000);
+  for(int i = 0;i<10000;i++){
+  frequence(i);
+  delay(2);
+  }
+  for(int i = 10000;i>0;i--){
+  frequence(i);
+  delay(2);
+  }
  }
 }

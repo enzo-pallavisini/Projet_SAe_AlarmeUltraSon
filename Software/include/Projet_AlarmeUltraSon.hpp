@@ -15,8 +15,8 @@
  // # Connection: 
  // #       Vcc (Arduino)    -> Pin 1 VCC (URM V4.0) 
  // #       GND (Arduino)    -> Pin 2 GND (URM V4.0) 
- // #       PIN 11 (Arduino)  -> Sortie Buzzer
- // #       PIN 10 (Arduino)  -> Sortie LED
+ // #       PIN 11 (Arduino)  -> Sortie Buzzer (3 sur PB2)
+ // #       PIN 10 (Arduino)  -> Sortie LED (2 sur PB2)
  // #       Pin 9 (Arduino)  -> Pin 4 ECHO (URM V4.0) 
  // #       Pin 8 (Arduino)  -> Pin 6 COMP/TRIG (URM V4.0) 
  // #       Pin A0 (Arduino)  -> Pin 7 DAC (URM V4.0) 
@@ -42,15 +42,16 @@ const char clavier[4][3] = {
 
 
 extern int Sortie_Led;
+extern int Sortie_Buzzer;
 extern int URECHO;        // PWM Output 0-25000US,Every 50US represent 1cm 
 extern int URTRIG;         // PWM trigger pin 
 extern int sensorPin;     // select the input pin for the potentiometer 
 extern int sensorValue;    // variable to store the value coming from the sensor 
-extern unsigned int DistanceMeasured; 
+extern unsigned int Distance_Mesure; 
 
 
 void frequence();
-void PWM_Mode();
+void Mesure_distance();
 void Init_Led();
 void Changer_Led();
 void Init_clavier();
