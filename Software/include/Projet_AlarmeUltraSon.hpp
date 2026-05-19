@@ -48,6 +48,7 @@ extern int sensorValue;    // variable to store the value coming from the sensor
 extern unsigned int DistanceMeasured; 
 
 
+void frequence();
 void PWM_Mode();
 void Changer_Led();
 void Init_clavier();
