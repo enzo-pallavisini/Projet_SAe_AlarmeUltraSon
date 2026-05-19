@@ -46,16 +46,9 @@ char code[5];
  } 
 
 
- void Allumer_Led()
+ void Changer_Led()
  {
-   if(DistanceMeasured < 70)
-   {
-    digitalWrite(Sortie_Led,HIGH);
-   }
-   else
-   {
-    digitalWrite(Sortie_Led,LOW);
-   }
+  PORTB ^= (1 << Sortie_Led);
  }
 
 
@@ -79,10 +72,7 @@ char code[5];
       case 2: PORTD |= (1 << PD3); break;
       case 3: PORTD |= (1 << PD4); break;
     }
-    Serial.print("    | ");
-    Serial.print(PINC, BIN);
-    Serial.print("    | ");
-    Serial.println(PORTD, BIN);
+    
     delay(100);
 
     if(PINC & (1 << PC3)) return clavier[ligne][0];
@@ -105,7 +95,6 @@ char code[5];
     {
       code[i] = touche;
       i++;
-      delay(300);
       while(lecture_clavier() != 0);    //Attendre relachement
     }  
   }  
@@ -115,9 +104,10 @@ char code[5];
 
  void Verifier_code(char code[])
  {
-   if(strcmp(code, "4582") == 0)
+   if(strcmp(code, "4582") == 0)      //Bon code
    {
-    tone(10,1000);      //Bon code
+    Changer_Led();
+    tone(10,1000);
     delay(500);
     tone(10,10000);
     delay(500);
@@ -126,8 +116,8 @@ char code[5];
     tone(10,10000);
     delay(500);
    }
-   else
+   else      //Mauvais code
    {
-          //Mauvais code
+    
    }
  }

@@ -12,7 +12,6 @@ void loop()
 { 
   PWM_Mode(); 
   delay(100);
-  Allumer_Led();
   Lire_code(code);
   Verifier_code(code);
 }  
