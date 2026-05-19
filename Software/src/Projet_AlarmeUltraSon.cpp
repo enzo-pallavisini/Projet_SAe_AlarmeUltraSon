@@ -51,9 +51,15 @@ void PWM_Mode()                             // a low pull on pin COMP/TRIG  trig
 } 
 
 
+void Init_Led()
+{
+  DDRB |= (1 << Sortie_Led);
+}
+
+
 void Changer_Led()
 {
- PORTB ^= (1 << 7);
+ PORTB ^= (1 << Sortie_Led);
 }
 
 

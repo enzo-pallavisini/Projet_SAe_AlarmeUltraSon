@@ -50,6 +50,7 @@ extern unsigned int DistanceMeasured;
 
 void frequence();
 void PWM_Mode();
+void Init_Led();
 void Changer_Led();
 void Init_clavier();
 void Lire_code(char code[]);

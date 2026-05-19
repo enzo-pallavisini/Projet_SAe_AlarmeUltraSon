@@ -6,13 +6,13 @@ void setup()
   Serial.begin(9600);                        // Sets the baud rate to 9600 
   Serial.println("Init the sensor");
   Init_clavier();
+  Init_Led();
 } 
 
 void loop() 
 { 
-  /*PWM_Mode(); 
+  PWM_Mode(); 
   delay(100);
   Lire_code(code);
-  Verifier_code(code);*/
-  Changer_Led();
+  Verifier_code(code);
 }  
