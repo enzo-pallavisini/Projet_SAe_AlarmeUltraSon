@@ -2,18 +2,14 @@
 
 int Sortie_Led = 3;
 int Sortie_Buzzer = 2;
-int URECHO = 9;      // PWM Output 0-25000US,Every 50US represent 1cm
+int URECHO = 1;      // PWM Output 0-25000US,Every 50US represent 1cm
 int URTRIG = 8;      // PWM trigger pin
 int sensorPin = A0;  // select the input pin for the potentiometer
 int sensorValue = 0; // variable to store the value coming from the sensor
 unsigned int Distance_Mesure = 0;
+bool alarme = 0;
 
 char code[5];
-
-void frequence(int x)
-{
-  OCR1A = ((16000000) / (2 * 8 * x)) - 1;
-}
 
 
 void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor reading
@@ -51,12 +47,28 @@ void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor readi
   }
 }
 
+
+void frequence(int x)
+{
+  if(x == 0)
+  {
+    OCR1B = 0;    // Arret du signal
+    return;
+  }
+  ICR1 = ((16000000UL) / (8UL * 2 * x)) - 1;
+  OCR1B = ICR1 / 2;   // Rapport cyclique de 50%
+}
+
+
 void Init_Buzzer()
 {
   DDRB |= (1 << Sortie_Buzzer);
-  TCCR1B |= (1 << WGM12) | (1 << CS11); // Prescaler à 8
-  TCCR1A |= (1 << COM1A0);
-  OCR1A = 0;
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11); // Mode Fast PWM et Prescaler à 8
+  TCCR1A |= (1 << COM1B0);  
+  ICR1 = 0;
+  OCR1B = 0;
 }
 
 void Init_Led()
@@ -121,8 +133,7 @@ void Lire_code(char code[])
     {
       code[i] = touche;
       i++;
-      while (lecture_clavier() != 0)
-        ; // Attendre relachement
+      while (lecture_clavier() != 0); // Attendre relachement
     }
   }
   code[4] = '\0'; // Fin de chaine
@@ -135,28 +146,44 @@ void Verifier_code(char code[])
     Changer_Led();
     Serial.println("Code bon");
     Mesure_distance();
-    for (int i = 9999; i > 99; i -= 20)
+    for (int i = 100; i < 10000; i += 20)
     {
-      // frequence(i);
-      //OCR1A = i;
-      OCR1A = 100;
+      frequence(i);
       delay(5);
-      Serial.println(OCR1A);
-    }&
-    for (int i = 99; i < 9999; i += 20)
-    {
-      // frequence(i);
-      //OCR1A = i;
-      OCR1A = 100;
-      delay(5);
-      Serial.println(OCR1A);
     }
+    for (int i = 10000; i > 100; i -= 20)
+    {
+      frequence(i);
+      delay(5);
+    }
+    frequence(0);
+    alarme ^= 1;
   }
   else // Mauvais code
   {
     Serial.println("Po bon");
   }
 }
+
+
+void Init_Can()
+{
+  ADMUX |= (1 << REFS0); //permet de choisir la valeur du VCC soit 5V
+  ADMUX &= ~((1 << MUX0) | (1 << MUX1) | (1 << MUX2) | (1 << MUX3)); // Canal A0
+  ADCSRA |= (1 << ADEN); //ACTIVE ADC
+  ADCSRA |= (1 << ADPS0) | (1 << ADPS1)  | (1 << ADPS2); //prescaler a 128
+}
+
+
+int Lire_ADC() {
+  ADCSRA |= (1 << ADSC);
+  do {}while(ADSC & (1 << ADSC));
+  uint16_t x_val = ADCL;
+  x_val += ADCH << 8;
+  return x_val;
+}
+
+
 
 ISR(PCINT0_vect)
 {

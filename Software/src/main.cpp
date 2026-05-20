@@ -8,12 +8,12 @@ void setup()
   Init_clavier();
   Init_Led();
   Init_Buzzer();
+  //Init_Can();
 } 
 
 void loop() 
 { 
-  tone(0, 10000);
-  delay(2000);
   Lire_code(code);
   Verifier_code(code);
+  
 }  
