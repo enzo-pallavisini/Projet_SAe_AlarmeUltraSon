@@ -71,15 +71,18 @@ void Init_Buzzer()
   OCR1B = 0;
 }
 
+
 void Init_Led()
 {
   DDRB |= (1 << Sortie_Led);
 }
 
+
 void Changer_Led()
 {
   PORTB ^= (1 << Sortie_Led);
 }
+
 
 void Init_clavier()
 {
@@ -87,6 +90,7 @@ void Init_clavier()
   DDRC &= ~((1 << PC3) | (1 << PC4) | (1 << PC5));           // Config colonnes = entrées
   PORTC |= (1 << PC3) | (1 << PC4) | (1 << PC5);             // Pull-up colonnes
 }
+
 
 char lecture_clavier()
 {
@@ -121,6 +125,7 @@ char lecture_clavier()
   return 0;
 }
 
+
 void Lire_code(char code[])
 {
   int i = 0;
@@ -139,24 +144,13 @@ void Lire_code(char code[])
   code[4] = '\0'; // Fin de chaine
 }
 
+
 void Verifier_code(char code[])
 {
   if (strcmp(code, "4582") == 0) // Bon code
   {
     Changer_Led();
     Serial.println("Code bon");
-    Mesure_distance();
-    for (int i = 100; i < 10000; i += 20)
-    {
-      frequence(i);
-      delay(5);
-    }
-    for (int i = 10000; i > 100; i -= 20)
-    {
-      frequence(i);
-      delay(5);
-    }
-    frequence(0);
     alarme ^= 1;
   }
   else // Mauvais code
@@ -168,26 +162,47 @@ void Verifier_code(char code[])
 
 void Init_Can()
 {
-  ADMUX |= (1 << REFS0); //permet de choisir la valeur du VCC soit 5V
+  ADMUX |= (1 << REFS0); //permet de choisir la valeur du VCC soit 5V (ADC varie entre 0 et 1023)
   ADMUX &= ~((1 << MUX0) | (1 << MUX1) | (1 << MUX2) | (1 << MUX3)); // Canal A0
-  ADCSRA |= (1 << ADEN); //ACTIVE ADC
-  ADCSRA |= (1 << ADPS0) | (1 << ADPS1)  | (1 << ADPS2); //prescaler a 128
+  ADCSRA |= (1 << ADEN); //ACTIVE ADC (allume le CAN)
+  ADCSRA |= (1 << ADPS0) | (1 << ADPS1)  | (1 << ADPS2); //prescaler a 128 (regle fréquence du CAN à 125KHz)
 }
 
 
-int Lire_ADC() {
-  ADCSRA |= (1 << ADSC);
-  do {}while(ADSC & (1 << ADSC));
+int Lire_ADC()
+{
+  ADCSRA |= (1 << ADSC);  //Commence conversion
+  do{}while(ADCSRA & (1 << ADSC)); //Attendre fin conversion
   uint16_t x_val = ADCL;
-  x_val += ADCH << 8;
+  x_val += (ADCH << 8);
   return x_val;
+}
+
+
+void Init_interruption()
+{
+  DDRB &= ~(1 << PB1);  //PB1 en entrée
+  PCICR |= (1 << PCIE0);  //Autorise interruption PORTB
+  PCMSK0 |= (1 << PCINT1);  //Active PB1
 }
 
 
 
 ISR(PCINT0_vect)
 {
-  if (Distance_Mesure < 50)
+  Mesure_distance();
+  if ((alarme == 1) | (Distance_Mesure < 50))
   {
+    for (int i = 100; i < 10000; i += 20)
+    {
+      frequence(i);
+      delay(5);
+    }
+    for (int i = 10000; i > 100; i -= 20)
+    {
+      frequence(i);
+      delay(5);
+    }
+    frequence(0);
   }
 }

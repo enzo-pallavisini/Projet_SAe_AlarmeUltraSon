@@ -60,3 +60,4 @@ void Lire_code(char code[]);
 void Verifier_code  (char code[]);
 void Init_Can();
 int Lire_ADC();
+void Init_interruption();
