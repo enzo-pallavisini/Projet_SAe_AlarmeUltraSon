@@ -152,6 +152,7 @@ void Verifier_code(char code[])
     Changer_Led();
     Serial.println("Code bon");
     alarme ^= 1;
+    Mesure_distance();
   }
   else // Mauvais code
   {
@@ -190,8 +191,7 @@ void Init_interruption()
 
 ISR(PCINT0_vect)
 {
-  Mesure_distance();
-  if ((alarme == 1) | (Distance_Mesure < 50))
+  if ((alarme == 1) | (Distance_Mesure > 100))
   {
     for (int i = 100; i < 10000; i += 20)
     {
