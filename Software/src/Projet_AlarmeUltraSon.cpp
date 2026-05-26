@@ -193,6 +193,11 @@ ISR(PCINT0_vect)
 {
   if (alarme == 1)
   {
+    if(lecture_clavier() != 0)
+    {
+      Lire_code(code);
+      Verifier_code(code);
+    }
     Mesure_distance();
     if(Distance_Mesure < 50){
       for (int i = 100; i < 10000; i += 20)
@@ -208,6 +213,5 @@ ISR(PCINT0_vect)
       }
     }
     frequence(0);
-    
   } 
 }

@@ -16,5 +16,4 @@ void loop()
 { 
   Lire_code(code);
   Verifier_code(code);
-  
 }  
