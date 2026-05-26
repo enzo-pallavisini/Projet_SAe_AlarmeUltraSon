@@ -50,7 +50,7 @@ void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor readi
 }
 
 
-void frequence(int x)
+void Frequence(int x)
 {
   if(x == 0)
   {
@@ -95,7 +95,7 @@ void Init_clavier()
 }
 
 
-char lecture_clavier()
+char Lecture_clavier()
 {
   for (int ligne = 0; ligne < 4; ligne++)
   {
@@ -134,14 +134,14 @@ void Lire_code(char code[])
   int i = 0;
   while (i < 4)
   {
-    char touche = lecture_clavier();
+    char touche = Lecture_clavier();
     Serial.println(touche);
 
     if (touche != 0) // verifie le code
     {
       code[i] = touche;
       i++;
-      while (lecture_clavier() != 0); // Attendre relachement
+      while (Lecture_clavier() != 0); // Attendre relachement
     }
   }
   code[4] = '\0'; // Fin de chaine
@@ -173,9 +173,12 @@ void Init_BP(void)
 
 void Definir_code(void)
 {
-  while(PIND == (PIND))
+  while(PIND & (1 << Entree_BP))
   {
-
+    for(int i; i < 4; i++)
+    {
+      code_secret[i] = Lecture_clavier();
+    }
   }
 }
 
@@ -208,9 +211,9 @@ void Init_interruption()
 
 
 
-ISR(PCINT0_vect)
+/*ISR(PCINT0_vect)
 {
-  if (alarme == 1)
+  if(alarme == 1)
   {
     if(lecture_clavier() != 0)
     {
@@ -219,18 +222,23 @@ ISR(PCINT0_vect)
     }
     Mesure_distance();
     if(Distance_Mesure < 50){
-      for (int i = 100; i < 10000; i += 20)
+      for(int i = 100; i < 10000; i += 20)
       {
         frequence(i);
         _delay_ms(5);
         
       }
-      for (int i = 10000; i > 100; i -= 20)
+      for(int i = 10000; i > 100; i -= 20)
       {
         frequence(i);
         _delay_ms(5);
       }
     }
     frequence(0);
-  } 
+  }
+  if((alarme == 0) & (PIND & (1 << Entree_BP)))
+  {
+    Definir_code();
+  }
 }
+*/

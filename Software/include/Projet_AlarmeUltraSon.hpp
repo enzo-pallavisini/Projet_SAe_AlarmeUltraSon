@@ -49,12 +49,13 @@ extern unsigned int Distance_Mesure;
 extern bool alarme;
 
 
-void frequence();
+void Frequence(int x);
 void Mesure_distance();
 void Init_Led();
 void Changer_Led();
 void Init_Buzzer();
 void Init_clavier();
+char Lecture_clavier();
 void Lire_code(char code[]);
 void Verifier_code  (char code[]);
 void Init_BP();
