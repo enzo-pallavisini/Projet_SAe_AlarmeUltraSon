@@ -2,12 +2,14 @@
 
 int Sortie_Led = 3;
 int Sortie_Buzzer = 2;
+int Entree_BP = 7; 
 int URECHO = 9;      // PWM Output 0-25000US,Every 50US represent 1cm
 int URTRIG = 8;      // PWM trigger pin
 int sensorPin = A0;  // select the input pin for the potentiometer
 int sensorValue = 0; // variable to store the value coming from the sensor
 unsigned int Distance_Mesure = 0;
 bool alarme = 0;
+char code_secret[5] = "4582";
 
 char code[5];
 
@@ -148,7 +150,7 @@ void Lire_code(char code[])
 
 void Verifier_code(char code[])
 {
-  if (strcmp(code, "4582") == 0) // Bon code
+  if (strcmp(code, code_secret) == 0) // Bon code
   {
     Changer_Led();
     Serial.println("Code bon");
@@ -157,6 +159,23 @@ void Verifier_code(char code[])
   else // Mauvais code
   {
     Serial.println("Po bon");
+  }
+}
+
+
+void Init_BP(void)
+{
+  PORTD |= (1 << Entree_BP);
+  DDRB |= (1 << Entree_BP);
+  // PIND permet d'avoir l'info si BP est appuyé
+}
+
+
+void Definir_code(void)
+{
+  while(PIND == (PIND))
+  {
+
   }
 }
 

@@ -15,19 +15,16 @@
  // # Connection: 
  // #       Vcc (Arduino)    -> Pin 1 VCC (URM V4.0) 
  // #       GND (Arduino)    -> Pin 2 GND (URM V4.0) 
- // #       PIN 11 (Arduino)  -> Sortie LED (PB3)
- // #       PIN 10 (Arduino)  -> Sortie Buzzer (PB2)
+ // #       PIN 11 (Arduino) -> Sortie LED (PB3)
+ // #       PIN 10 (Arduino) -> Sortie Buzzer (PB2)
  // #       Pin 9 (Arduino)  -> Pin 4 ECHO (URM V4.0) (PB1)
  // #       Pin 8 (Arduino)  -> Pin 6 COMP/TRIG (URM V4.0) (PB0)
- // #       Pin A0 (Arduino)  -> Pin 7 DAC (URM V4.0) 
+ // #       Pin A0 (Arduino) -> Pin 7 DAC (URM V4.0) 
+ // #       Pin 7 (Arduino)  -> Entrée bouton poussoirs    
  // # Working Mode: PWM trigger pin  mode. 
 
 
 #define  Measure  1     //Mode select 
-#define  Mask2   (1 << 2)
-#define  Mask3   (1 << 3)
-#define  Mask4   (1 << 4)
-#define  Mask6   (1 << 6)
  
 
 extern char code[5];    //5 car code + caractère spécial "\0" pour la fin de la chaîne de caractères
@@ -43,6 +40,7 @@ const char clavier[4][3] = {
 
 extern int Sortie_Led;
 extern int Sortie_Buzzer;
+extern int Entree_BP;
 extern int URECHO;        // PWM Output 0-25000US,Every 50US represent 1cm 
 extern int URTRIG;         // PWM trigger pin 
 extern int sensorPin;     // select the input pin for the potentiometer 
@@ -59,6 +57,8 @@ void Init_Buzzer();
 void Init_clavier();
 void Lire_code(char code[]);
 void Verifier_code  (char code[]);
+void Init_BP();
+void Definir_code(void);
 void Init_Can();
 int Lire_ADC();
 void Init_interruption();
