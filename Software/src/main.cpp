@@ -8,7 +8,7 @@ void setup()
   Init_clavier();
   Init_Led();
   Init_Buzzer();
-  Init_Can();
+  //Init_Can();
   Init_interruption();
 } 
 

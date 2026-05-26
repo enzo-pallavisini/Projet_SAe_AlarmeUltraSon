@@ -2,7 +2,7 @@
 
 int Sortie_Led = 3;
 int Sortie_Buzzer = 2;
-int URECHO = 1;      // PWM Output 0-25000US,Every 50US represent 1cm
+int URECHO = 9;      // PWM Output 0-25000US,Every 50US represent 1cm
 int URTRIG = 8;      // PWM trigger pin
 int sensorPin = A0;  // select the input pin for the potentiometer
 int sensorValue = 0; // variable to store the value coming from the sensor
@@ -52,9 +52,10 @@ void frequence(int x)
 {
   if(x == 0)
   {
-    OCR1B = 0;    // Arret du signal
+    DDRB &= ~(1 << Sortie_Buzzer);    // Arret du signal
     return;
   }
+  DDRB |= (1 << Sortie_Buzzer);
   ICR1 = ((16000000UL) / (8UL * 2 * x)) - 1;
   OCR1B = ICR1 / 2;   // Rapport cyclique de 50%
 }
@@ -152,7 +153,6 @@ void Verifier_code(char code[])
     Changer_Led();
     Serial.println("Code bon");
     alarme ^= 1;
-    Mesure_distance();
   }
   else // Mauvais code
   {
@@ -191,18 +191,23 @@ void Init_interruption()
 
 ISR(PCINT0_vect)
 {
-  if ((alarme == 1) | (Distance_Mesure > 100))
+  if (alarme == 1)
   {
-    for (int i = 100; i < 10000; i += 20)
-    {
-      frequence(i);
-      delay(5);
-    }
-    for (int i = 10000; i > 100; i -= 20)
-    {
-      frequence(i);
-      delay(5);
+    Mesure_distance();
+    if(Distance_Mesure < 50){
+      for (int i = 100; i < 10000; i += 20)
+      {
+        frequence(i);
+        _delay_ms(5);
+        
+      }
+      for (int i = 10000; i > 100; i -= 20)
+      {
+        frequence(i);
+        _delay_ms(5);
+      }
     }
     frequence(0);
-  }
+    
+  } 
 }
