@@ -116,7 +116,7 @@ char Lecture_clavier()
       break;
     }
 
-    delay(100);
+    delay(50);
 
     if (PINC & (1 << PC3))
       return clavier[ligne][0];
@@ -166,7 +166,7 @@ void Verifier_code(char code[])
 void Init_BP(void)
 {
   PORTD |= (1 << Entree_BP);
-  DDRB |= (1 << Entree_BP);
+  DDRB &= ~(1 << Entree_BP);
   // PIND permet d'avoir l'info si BP est appuyé
 }
 
@@ -178,6 +178,7 @@ void Definir_code(void)
     for(int i; i < 4; i++)
     {
       code_secret[i] = Lecture_clavier();
+      Serial.print(code_secret[i]);
     }
   }
 }
@@ -202,20 +203,20 @@ int Lire_ADC()
 }
 
 
-void Init_interruption()
+/*void Init_interruption()
 {
   DDRB &= ~(1 << PB1);  //PB1 en entrée
   PCICR |= (1 << PCIE0);  //Autorise interruption PORTB
   PCMSK0 |= (1 << PCINT1);  //Active PB1
 }
 
-
+*/
 
 /*ISR(PCINT0_vect)
 {
   if(alarme == 1)
   {
-    if(lecture_clavier() != 0)
+    if(Lecture_clavier() != 0)
     {
       Lire_code(code);
       Verifier_code(code);
@@ -224,17 +225,17 @@ void Init_interruption()
     if(Distance_Mesure < 50){
       for(int i = 100; i < 10000; i += 20)
       {
-        frequence(i);
+        Frequence(i);
         _delay_ms(5);
         
       }
       for(int i = 10000; i > 100; i -= 20)
       {
-        frequence(i);
+        Frequence(i);
         _delay_ms(5);
       }
     }
-    frequence(0);
+    Frequence(0);
   }
   if((alarme == 0) & (PIND & (1 << Entree_BP)))
   {

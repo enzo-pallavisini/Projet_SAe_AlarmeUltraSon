@@ -9,39 +9,52 @@ void setup()
   Init_Led();
   Init_Buzzer();
   //Init_Can();
-  Init_interruption();
+  //Init_interruption();
 }
 
 void loop() 
 { 
-  Lire_code(code);
-  Verifier_code(code);
-  if(alarme == 1)
+  if(alarme == 0)
   {
+    while(Lecture_clavier() == 0)
+    {
+      if(PIND & (1 << Entree_BP))
+      {
+        Serial.println("Modifiction Code :");
+        Definir_code();
+      }
+    }
     if(Lecture_clavier() != 0)
     {
       Lire_code(code);
       Verifier_code(code);
     }
-    Mesure_distance();
-    if(Distance_Mesure < 50)
+  }
+  if(alarme == 1)
+  {
+    while(Lecture_clavier() == 0)
     {
-      for(int i = 100; i < 10000; i += 20)
+      Mesure_distance();
+      if(Distance_Mesure < 50)
       {
-        Frequence(i);
-        _delay_ms(5);
-        
-      }
-      for(int i = 10000; i > 100; i -= 20)
-      {
-        Frequence(i);
-        _delay_ms(5);
+        for(int i = 100; i < 10000; i += 20)
+        {
+          Frequence(i);
+          _delay_ms(5);
+          
+        }
+        for(int i = 10000; i > 100; i -= 20)
+        {
+          Frequence(i);
+          _delay_ms(5);
+        }
+        Frequence(0);
       }
     }
-    Frequence(0);
-  }
-  if((alarme == 0) & (PIND & (1 << Entree_BP)))
-  {
-    Definir_code();
+    if(Lecture_clavier() != 0)
+    {
+      Lire_code(code);
+      Verifier_code(code);
+    }
   }
 }  
