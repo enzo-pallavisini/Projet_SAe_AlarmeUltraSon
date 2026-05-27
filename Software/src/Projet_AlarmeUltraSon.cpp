@@ -175,11 +175,22 @@ void Definir_code(void)
 {
   while(PIND & (1 << Entree_BP))
   {
-    for(int i; i < 4; i++)
+    int i = 0;
+    
+    while ((i < 4))
     {
-      code_secret[i] = Lecture_clavier();
-      Serial.print(code_secret[i]);
+      Serial.println("Modifiction Code :");
+      char touche = Lecture_clavier();
+      Serial.println(touche);
+      if (touche != 0) // verifie le code
+      {
+        code_secret[i] = touche;
+        i++;
+        while (Lecture_clavier() != 0); // Attendre relachement
+        Serial.println(code_secret[i]);
+      }
     }
+    code_secret[4] = '\0'; // Fin de chaine
   }
 }
 
