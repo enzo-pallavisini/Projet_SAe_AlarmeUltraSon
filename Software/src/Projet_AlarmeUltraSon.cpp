@@ -177,7 +177,7 @@ void Definir_code(void)
   {
     int i = 0;
     
-    while ((i < 4))
+    while ((i < 4) & (PIND & (1 << Entree_BP)))
     {
       Serial.println("Modifiction Code :");
       char touche = Lecture_clavier();
