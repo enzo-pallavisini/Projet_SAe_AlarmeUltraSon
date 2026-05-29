@@ -27,6 +27,7 @@
 #define  Measure  1     //Mode select 
  
 
+extern char code_secret[5];
 extern char code[5];    //5 car code + caractère spécial "\0" pour la fin de la chaîne de caractères
 
 
@@ -53,13 +54,15 @@ void Frequence(int x);
 void Mesure_distance();
 void Init_Led();
 void Changer_Led();
+void Clignotter_led();
 void Init_Buzzer();
 void Init_clavier();
 char Lecture_clavier();
 void Lire_code(char code[]);
 void Verifier_code  (char code[]);
 void Init_BP();
-void Definir_code(void);
+bool Bp_appuyee();
+void Definir_code();
 void Init_Can();
 int Lire_ADC();
 void Init_interruption();

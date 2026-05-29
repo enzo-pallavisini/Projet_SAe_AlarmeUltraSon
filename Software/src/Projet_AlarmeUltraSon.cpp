@@ -87,6 +87,16 @@ void Changer_Led()
 }
 
 
+void Clignotter_led()
+{
+  for(int i = 0; i < 4; i++)
+  {
+    Changer_Led();
+    delay(250);
+  }
+}
+
+
 void Init_clavier()
 {
   DDRD |= (1 << PD6) | (1 << PD2) | (1 << PD3) | (1 << PD4); // Config lignes = sorties
@@ -171,26 +181,41 @@ void Init_BP(void)
 }
 
 
+bool Bp_appuyee(void)
+{
+  if((PIND & (1 << Entree_BP)))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+
+
 void Definir_code(void)
 {
   while(PIND & (1 << Entree_BP))
   {
     int i = 0;
-    
-    while ((i < 4) & (PIND & (1 << Entree_BP)))
+    Serial.println("Modifiction Code :");
+    while((i < 4) & Bp_appuyee())
     {
-      Serial.println("Modifiction Code :");
       char touche = Lecture_clavier();
-      Serial.println(touche);
-      if (touche != 0) // verifie le code
+      if(touche != 0)
       {
         code_secret[i] = touche;
-        i++;
         while (Lecture_clavier() != 0); // Attendre relachement
         Serial.println(code_secret[i]);
+        i++;
       }
     }
     code_secret[4] = '\0'; // Fin de chaine
+    if(i == 4)
+    {
+      Clignotter_led();
+    }
   }
 }
 
