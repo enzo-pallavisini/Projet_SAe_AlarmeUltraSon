@@ -126,7 +126,7 @@ char Lecture_clavier()
       break;
     }
 
-    delay(50);
+    delay(50);  // Anti-rebond
 
     if (PINC & (1 << PC3))
       return clavier[ligne][0];
@@ -199,7 +199,7 @@ void Definir_code(void)
   while(PIND & (1 << Entree_BP))
   {
     int i = 0;
-    Serial.println("Modifiction Code :");
+    Serial.println("Modification Code :");
     while((i < 4) & Bp_appuyee())
     {
       char touche = Lecture_clavier();
@@ -214,7 +214,12 @@ void Definir_code(void)
     code_secret[4] = '\0'; // Fin de chaine
     if(i == 4)
     {
+      Serial.println("Modification réussie !");
       Clignotter_led();
+    }
+    else
+    {
+      Serial.println("Modification annulée !");
     }
   }
 }
@@ -237,45 +242,3 @@ int Lire_ADC()
   x_val += (ADCH << 8);
   return x_val;
 }
-
-
-/*void Init_interruption()
-{
-  DDRB &= ~(1 << PB1);  //PB1 en entrée
-  PCICR |= (1 << PCIE0);  //Autorise interruption PORTB
-  PCMSK0 |= (1 << PCINT1);  //Active PB1
-}
-
-*/
-
-/*ISR(PCINT0_vect)
-{
-  if(alarme == 1)
-  {
-    if(Lecture_clavier() != 0)
-    {
-      Lire_code(code);
-      Verifier_code(code);
-    }
-    Mesure_distance();
-    if(Distance_Mesure < 50){
-      for(int i = 100; i < 10000; i += 20)
-      {
-        Frequence(i);
-        _delay_ms(5);
-        
-      }
-      for(int i = 10000; i > 100; i -= 20)
-      {
-        Frequence(i);
-        _delay_ms(5);
-      }
-    }
-    Frequence(0);
-  }
-  if((alarme == 0) & (PIND & (1 << Entree_BP)))
-  {
-    Definir_code();
-  }
-}
-*/
