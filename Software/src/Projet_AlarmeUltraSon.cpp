@@ -16,15 +16,15 @@ char code[5];
 
 void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor reading
 {
-  Serial.print("Distance Mesure =");
-  digitalWrite(URTRIG, LOW);
-  digitalWrite(URTRIG, HIGH); // reading Pin PWM will output pulses
+  Serial.print("Distance Mesure = ");
+  PIND &= ~(1 << URTRIG);
+  PIND |= (1 << URTRIG);
   if (Measure)
   {
     unsigned long LowLevelTime = pulseIn(URECHO, LOW);
     if (LowLevelTime >= 45000) // the reading is invalid.
     {
-      Serial.print("Invalid");
+      Serial.println("Invalid");
     }
     else
     {

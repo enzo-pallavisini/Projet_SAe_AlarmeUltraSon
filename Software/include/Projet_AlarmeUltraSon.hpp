@@ -24,7 +24,7 @@
  // # Working Mode: PWM trigger pin  mode. 
 
 
-#define  Measure  1     //Mode select 
+#define  Measure  1     //Mode select capteur
  
 
 extern char code_secret[5];
