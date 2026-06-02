@@ -14,6 +14,22 @@ char code_secret[5] = "4582";
 char code[5];
 
 
+void init_can(void)
+{
+  ADMUX = 0b01000000;
+  ADCSRA = ADCSRA_CAN_ACTIF | ADCSRA_PRESCALER_16;
+}
+
+int conversion_an_8(void)
+{
+    ADMUX |= MASK_ADLAR;
+    ADCSRA |= MASK_CONV;
+    do{}while((ADCSRA & MASK_CONV) == MASK_CONV);
+    delay(200);
+    return ADCH;
+}
+
+
 void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor reading
 {
   Serial.print("Distance Mesure = ");

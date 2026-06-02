@@ -39,6 +39,16 @@ const char clavier[4][3] = {
 };
 
 
+#define MASK_CONV 0b01000000
+#define MASK_ADLAR 0b00100000
+
+
+#define ADMUX_ENTREE_ADC1 (1 << 0)
+#define ADCSRB_ENTREE_ADC8 (1 << 3)  // Si autre Entree_ADCn, additionner avec ce n
+#define ADCSRA_PRESCALER_16 (1 << 2)
+#define ADCSRA_CAN_ACTIF (1 << 7)
+
+
 extern int Sortie_Led;
 extern int Sortie_Buzzer;
 extern int Entree_BP;
@@ -65,4 +75,5 @@ bool Bp_appuyee();
 void Definir_code();
 void Init_Can();
 int Lire_ADC();
-void Init_interruption();
+void init_can(void);
+int conversion_an_8(void);
