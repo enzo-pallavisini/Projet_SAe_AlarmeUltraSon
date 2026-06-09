@@ -24,11 +24,9 @@
  // # Working Mode: PWM trigger pin  mode. 
 
 
-#define  Measure  1     //Mode select capteur
- 
 
 extern char code_secret[5];
-extern char code[5];    //5 car code + caractère spécial "\0" pour la fin de la chaîne de caractères
+extern char code[5];            //5 car code + caractère spécial "\0" pour la fin de la chaîne de caractères
 
 
 const char clavier[4][3] = {
@@ -54,8 +52,6 @@ extern int Sortie_Buzzer;
 extern int Entree_BP;
 extern int URECHO;        // PWM Output 0-25000US,Every 50US represent 1cm 
 extern int URTRIG;         // PWM trigger pin 
-extern int sensorPin;     // select the input pin for the potentiometer 
-extern int sensorValue;    // variable to store the value coming from the sensor 
 extern unsigned int Distance_Mesure; 
 extern bool alarme;
 
@@ -73,7 +69,3 @@ void Verifier_code  (char code[]);
 void Init_BP();
 bool Bp_appuyee();
 void Definir_code();
-void Init_Can();
-int Lire_ADC();
-void init_can(void);
-int conversion_an_8(void);

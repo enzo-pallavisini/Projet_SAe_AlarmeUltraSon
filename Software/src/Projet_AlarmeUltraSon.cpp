@@ -5,8 +5,6 @@ int Sortie_Buzzer = 2;
 int Entree_BP = 7; 
 int URECHO = 9;      // PWM Output 0-25000US,Every 50US represent 1cm
 int URTRIG = 8;      // PWM trigger pin
-int sensorPin = A0;  // select the input pin for the potentiometer
-int sensorValue = 0; // variable to store the value coming from the sensor
 unsigned int Distance_Mesure = 0;
 bool alarme = 0;
 char code_secret[5] = "4582";
@@ -14,28 +12,11 @@ char code_secret[5] = "4582";
 char code[5];
 
 
-void init_can(void)
-{
-  ADMUX = 0b01000000;
-  ADCSRA = ADCSRA_CAN_ACTIF | ADCSRA_PRESCALER_16;
-}
-
-int conversion_an_8(void)
-{
-    ADMUX |= MASK_ADLAR;
-    ADCSRA |= MASK_CONV;
-    do{}while((ADCSRA & MASK_CONV) == MASK_CONV);
-    delay(200);
-    return ADCH;
-}
-
-
 void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor reading
 {
   Serial.print("Distance Mesure = ");
   PIND &= ~(1 << URTRIG);
   PIND |= (1 << URTRIG);
-  if (Measure)
   {
     unsigned long LowLevelTime = pulseIn(URECHO, LOW);
     if (LowLevelTime >= 45000) // the reading is invalid.
@@ -46,20 +27,6 @@ void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor readi
     {
       Distance_Mesure = LowLevelTime / 50; // every 50us low level stands for 1cm
       Serial.print(Distance_Mesure);
-      Serial.println("cm");
-    }
-  }
-  else
-  {
-    sensorValue = analogRead(sensorPin);
-    if (sensorValue <= 10) // the reading is invalid.
-    {
-      Serial.print("Invalid");
-    }
-    else
-    {
-      sensorValue = sensorValue * 0.718;
-      Serial.print(sensorValue);
       Serial.println("cm");
     }
   }
@@ -238,23 +205,4 @@ void Definir_code(void)
       Serial.println("Modification annulée !");
     }
   }
-}
-
-
-void Init_Can()
-{
-  ADMUX |= (1 << REFS0); //permet de choisir la valeur du VCC soit 5V (ADC varie entre 0 et 1023)
-  ADMUX &= ~((1 << MUX0) | (1 << MUX1) | (1 << MUX2) | (1 << MUX3)); // Canal A0
-  ADCSRA |= (1 << ADEN); //ACTIVE ADC (allume le CAN)
-  ADCSRA |= (1 << ADPS0) | (1 << ADPS1)  | (1 << ADPS2); //prescaler a 128 (regle fréquence du CAN à 125KHz)
-}
-
-
-int Lire_ADC()
-{
-  ADCSRA |= (1 << ADSC);  //Commence conversion
-  do{}while(ADCSRA & (1 << ADSC)); //Attendre fin conversion
-  uint16_t x_val = ADCL;
-  x_val += (ADCH << 8);
-  return x_val;
 }
