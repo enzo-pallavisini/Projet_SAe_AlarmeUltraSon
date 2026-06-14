@@ -18,7 +18,7 @@ void Mesure_distance()
   PIND &= ~(1 << URTRIG);
   PIND |= (1 << URTRIG);
   {
-    unsigned long LowLevelTime = pulseIn(URECHO, LOW);
+    unsigned long LowLevelTime = pulseIn(URECHO, LOW);  // recupère le temps à l'état bas (en microseconde)
     if (LowLevelTime >= 45000) // lecture invalide
     {
       Serial.println("Invalid");
@@ -37,7 +37,7 @@ void Frequence(int x)
 {
   if(x == 0)
   {
-    DDRB &= ~(1 << Sortie_Buzzer);    // Arret du signal
+    DDRB &= ~(1 << Sortie_Buzzer);  // Arret du signal
     return;
   }
   DDRB |= (1 << Sortie_Buzzer);
@@ -51,7 +51,7 @@ void Init_Buzzer()
   DDRB |= (1 << Sortie_Buzzer);
   TCCR1A = 0;
   TCCR1B = 0;
-  TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11); // Mode Fast PWM et Prescaler à 8
+  TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Mode Fast PWM et Prescaler à 8
   TCCR1A |= (1 << COM1B0);  
   ICR1 = 0;
   OCR1B = 0;
