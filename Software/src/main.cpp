@@ -4,10 +4,10 @@
 void setup()  
 { 
   Serial.begin(9600);
-  Serial.println("Init the sensor");
   Init_clavier();
   Init_Led();
   Init_Buzzer();
+  Init_BP();
 }
 
 void loop() 
@@ -19,7 +19,6 @@ void loop()
       {
         if(PIND & (1 << Entree_BP))
         {
-          
           Definir_code();
         }
       }
@@ -38,8 +37,7 @@ void loop()
           for(int i = 100; i < 10000; i += 20)
           {
             Frequence(i);
-            _delay_ms(5);
-            
+            _delay_ms(5);            
           }
           for(int i = 10000; i > 100; i -= 20)
           {

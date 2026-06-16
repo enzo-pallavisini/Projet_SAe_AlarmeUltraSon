@@ -3,29 +3,29 @@
 int Sortie_Led = 3;
 int Sortie_Buzzer = 2;
 int Entree_BP = 7; 
-int URECHO = 9;      // PWM Output 0-25000US,Every 50US represent 1cm
+int URECHO = 9;      // PWM Output 0-25000US, 50µs represente 1cm
 int URTRIG = 8;      // PWM trigger pin
 unsigned int Distance_Mesure = 0;
-bool alarme = 0;
+bool alarme = 0;      // Bool à 0 pour alarme désactiver, à 1 pour alarme active
 char code_secret[5] = "4582";
 
 char code[5];
 
 
-void Mesure_distance() // a low pull on pin COMP/TRIG  triggering a sensor reading
+void Mesure_distance()
 {
   Serial.print("Distance Mesure = ");
   PIND &= ~(1 << URTRIG);
   PIND |= (1 << URTRIG);
   {
-    unsigned long LowLevelTime = pulseIn(URECHO, LOW);
-    if (LowLevelTime >= 45000) // the reading is invalid.
+    unsigned long LowLevelTime = pulseIn(URECHO, LOW);  // recupère le temps à l'état bas (en microseconde)
+    if (LowLevelTime >= 45000) // lecture invalide
     {
       Serial.println("Invalid");
     }
     else
     {
-      Distance_Mesure = LowLevelTime / 50; // every 50us low level stands for 1cm
+      Distance_Mesure = LowLevelTime / 50; // chaque niveau bas de 50µs correspond à 1cm
       Serial.print(Distance_Mesure);
       Serial.println("cm");
     }
@@ -37,7 +37,7 @@ void Frequence(int x)
 {
   if(x == 0)
   {
-    DDRB &= ~(1 << Sortie_Buzzer);    // Arret du signal
+    DDRB &= ~(1 << Sortie_Buzzer);  // Arret du signal
     return;
   }
   DDRB |= (1 << Sortie_Buzzer);
@@ -51,7 +51,7 @@ void Init_Buzzer()
   DDRB |= (1 << Sortie_Buzzer);
   TCCR1A = 0;
   TCCR1B = 0;
-  TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11); // Mode Fast PWM et Prescaler à 8
+  TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Mode Fast PWM et Prescaler à 8
   TCCR1A |= (1 << COM1B0);  
   ICR1 = 0;
   OCR1B = 0;
@@ -146,12 +146,12 @@ void Verifier_code(char code[])
   if (strcmp(code, code_secret) == 0) // Bon code
   {
     Changer_Led();
-    Serial.println("Code bon");
+    Serial.println("CODE BON !");
     alarme ^= 1;
   }
   else // Mauvais code
   {
-    Serial.println("Po bon");
+    Serial.println("CODE FAUX !");
   }
 }
 

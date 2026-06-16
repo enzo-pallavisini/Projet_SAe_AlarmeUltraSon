@@ -40,8 +40,8 @@ const char clavier[4][3] = {
 extern int Sortie_Led;
 extern int Sortie_Buzzer;
 extern int Entree_BP;
-extern int URECHO;        // PWM Output 0-25000US,Every 50US represent 1cm 
-extern int URTRIG;         // PWM trigger pin 
+extern int URECHO;
+extern int URTRIG;
 extern unsigned int Distance_Mesure; 
 extern bool alarme;
 
