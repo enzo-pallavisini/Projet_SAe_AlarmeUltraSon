@@ -3,13 +3,12 @@
 int Sortie_Led = 3;
 int Sortie_Buzzer = 2;
 int Entree_BP = 7; 
-int URECHO = 9;      // PWM Output 0-25000US, 50µs represente 1cm
-int URTRIG = 8;      // PWM trigger pin
+int URECHO = 9;       // PWM Output 0-25000US, 50µs represente 1cm
+int URTRIG = 8;       // PWM trigger pin
 unsigned int Distance_Mesure = 0;
 bool alarme = 0;      // Bool à 0 pour alarme désactiver, à 1 pour alarme active
-char code_secret[5] = "4582";
-
-char code[5];
+char code_secret[5] = "4582";   //5 car code + caractère spécial "\0" pour la fin de la chaîne de caractères
+char code[5];         
 
 
 void Mesure_distance()
@@ -158,8 +157,8 @@ void Verifier_code(char code[])
 
 void Init_BP(void)
 {
-  PORTD |= (1 << Entree_BP);
-  DDRB &= ~(1 << Entree_BP);
+  DDRD &= ~(1 << Entree_BP);  // PD7 en entrée
+  PORTD &= ~(1 << Entree_BP); // pull-up interne désactivé
   // PIND permet d'avoir l'info si BP est appuyé
 }
 
