@@ -24,7 +24,6 @@
  // # Working Mode: PWM trigger pin  mode. 
 
 
- 
 extern char code_secret[5];
 extern char code[5];            //5 car code + caractère spécial "\0" pour la fin de la chaîne de caractères
 

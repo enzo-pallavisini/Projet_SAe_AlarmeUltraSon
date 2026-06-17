@@ -51,7 +51,7 @@ void Init_Buzzer()
   TCCR1A = 0;
   TCCR1B = 0;
   TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Mode Fast PWM et Prescaler à 8
-  TCCR1A |= (1 << COM1B0);  
+  TCCR1A |= (1 << COM1B0);  // Toggle
   ICR1 = 0;
   OCR1B = 0;
 }
@@ -69,7 +69,7 @@ void Changer_Led()
 }
 
 
-void Clignotter_led()
+void Clignoter_Led()
 {
   for(int i = 0; i < 4; i++)
   {
