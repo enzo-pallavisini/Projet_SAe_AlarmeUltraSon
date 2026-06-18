@@ -38,6 +38,18 @@ void Mesure_distance()
 }
 
 
+void Init_Buzzer()
+{
+  DDRB |= (1 << Sortie_Buzzer);
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Mode Fast PWM et Prescaler à 8
+  TCCR1A |= (1 << COM1B0);  // Toggle
+  ICR1 = 0;
+  OCR1B = 0;
+}
+
+
 void Frequence(int x)
 {
   if(x == 0)
@@ -48,18 +60,6 @@ void Frequence(int x)
   DDRB |= (1 << Sortie_Buzzer);
   ICR1 = ((16000000UL) / (8UL * 2 * x)) - 1;
   OCR1B = ICR1 / 2;   // Rapport cyclique de 50%
-}
-
-
-void Init_Buzzer()
-{
-  DDRB |= (1 << Sortie_Buzzer);
-  TCCR1A = 0;
-  TCCR1B = 0;
-  TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Mode Fast PWM et Prescaler à 8
-  TCCR1A |= (1 << COM1B0);  // Toggle
-  ICR1 = 0;
-  OCR1B = 0;
 }
 
 
