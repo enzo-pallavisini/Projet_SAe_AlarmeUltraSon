@@ -50,7 +50,7 @@ void Init_URM37();
 void Mesure_distance();
 void Init_Led();
 void Changer_Led();
-void Clignotter_led();
+void Clignoter_Led();
 void Init_Buzzer();
 void Init_clavier();
 char Lecture_clavier();
