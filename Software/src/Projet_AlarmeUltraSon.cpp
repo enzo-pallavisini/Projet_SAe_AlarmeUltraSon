@@ -89,7 +89,6 @@ void Init_clavier()
 {
   DDRD |= (1 << PD6) | (1 << PD2) | (1 << PD3) | (1 << PD4); // Config lignes = sorties
   DDRC &= ~((1 << PC3) | (1 << PC4) | (1 << PC5));           // Config colonnes = entrées
-  PORTC |= (1 << PC3) | (1 << PC4) | (1 << PC5);             // Pull-up colonnes
 }
 
 
