@@ -47,6 +47,7 @@ extern bool alarme;
 
 
 void Frequence(int x);
+void Init_URM37();
 void Mesure_distance();
 void Init_Led();
 void Changer_Led();

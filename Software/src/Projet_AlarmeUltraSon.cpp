@@ -12,11 +12,16 @@ char code_secret[5] = "4582";
 char code[5];
 
 
+void Init_URM37()
+{
+  DDRB |= (1 << URTRIG);
+}
+
+
 void Mesure_distance()
 {
+  PORTB |= (1 << URTRIG);
   Serial.print("Distance Mesure = ");
-  PIND &= ~(1 << URTRIG);
-  PIND |= (1 << URTRIG);
   {
     unsigned long LowLevelTime = pulseIn(URECHO, LOW);  // recupère le temps à l'état bas (en microseconde)
     if (LowLevelTime >= 45000) // lecture invalide
@@ -30,6 +35,7 @@ void Mesure_distance()
       Serial.println("cm");
     }
   }
+  PORTB &= ~(1 << URTRIG);
 }
 
 
