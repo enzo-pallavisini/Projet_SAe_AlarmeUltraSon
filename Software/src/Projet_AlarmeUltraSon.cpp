@@ -183,7 +183,7 @@ bool Bp_appuyee(void)
 
 void Definir_code(void)
 {
-  while(PIND & (1 << Entree_BP))
+  while(Bp_appuyee())
   {
     int i = 0;
     Serial.println("Modification Code :");
